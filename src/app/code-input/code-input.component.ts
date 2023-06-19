@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ParsingService } from '../parsing.service';
 
 @Component({
     selector: 'ctpb-code-input',
@@ -8,11 +9,13 @@ import { Component } from '@angular/core';
 export class CodeInputComponent {
     public conversionClass?: conversionClass;
 
+    constructor(private _parsingService: ParsingService) {}
+
     public handleCodeInputChange() {
         this.conversionClass = undefined;
 
-        let className = this.getClassName(this.inputCode);
-        let properties = this.getFields(this.inputCode);
+        let className = this._parsingService.getClassName(this.inputCode);
+        let properties = this._parsingService.getFields(this.inputCode);
 
         properties.forEach((element) => {
             this.convertCsharpTypeToProtobufType(element);
@@ -22,41 +25,6 @@ export class CodeInputComponent {
         console.log(properties);
 
         this.conversionClass = { name: className, properties: properties };
-    }
-
-    private getClassName(input: string): string {
-        const classNameRegex = /class\s+(\w+)/;
-        const matches = input.match(classNameRegex);
-        if (matches && matches.length > 1) {
-            return matches[1];
-        }
-        throw new Error('Failed to parse class name.');
-    }
-
-    private getFields(input: string): Property[] {
-        const fieldRegex =
-            /public\s(?!class|enum)([\w<>\[\]]*)\s([^\s\(\n]*)\s/gm;
-        const fields: Property[] = [];
-        let matches: RegExpExecArray | null;
-
-        // find all fields
-        while ((matches = fieldRegex.exec(input)) !== null) {
-            const [, csharpType, name] = matches;
-
-            fields.push({
-                name,
-                csharpType,
-                protobufType: '',
-                isChecked: true,
-                isCollection: false,
-            });
-        }
-
-        if (fields.length === 0) {
-            throw new Error('Failed to parse fields.');
-        }
-
-        return fields;
     }
 
     private _conversionMatrix = new Map<string, string>([
@@ -78,7 +46,7 @@ export class CodeInputComponent {
         ['uint?', 'google.protobuf.UInt32Value'],
         ['long?', 'google.protobuf.Int64Value'],
         ['ulong?', 'google.protobuf.UInt64Value'],
-        ['string', 'google.protobuf.StringValue'],
+        ['string?', 'google.protobuf.StringValue'],
         ['bool?', 'google.protobuf.BoolValue'],
     ]);
 
@@ -105,12 +73,22 @@ export class CodeInputComponent {
     ];
 
     private convertCsharpTypeToProtobufType(property: Property) {
-        const isCollection = true;
-        const csharpType = property.csharpType.toLocaleLowerCase();
+        const arrayRegEx = /\[\d*\]/gm;
+        const collectionRegEx = /list|observablecollection/gm;
+        let csharpType = property.csharpType.toLocaleLowerCase();
 
-        property.protobufType = this._conversionMatrix.has(csharpType)
-            ? this._conversionMatrix.get(csharpType)!
-            : '';
+        let isCollection = false;
+
+        if (arrayRegEx.test(csharpType)) {
+            isCollection = true;
+            csharpType = csharpType.replace(arrayRegEx, '');
+        } else if (collectionRegEx.test(csharpType)) {
+            isCollection = true;
+            csharpType = csharpType.replace(collectionRegEx, '').slice(1, -1);
+            console.log(csharpType);
+        }
+
+        property.protobufType = this._conversionMatrix.has(csharpType) ? this._conversionMatrix.get(csharpType)! : '';
 
         property.isCollection = isCollection;
     }
