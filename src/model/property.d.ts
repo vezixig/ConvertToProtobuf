@@ -1,4 +1,7 @@
 declare interface Property {
     name: string;
-    propertyType: string;
+    csharpType: string;
+    protobufType: string;
+    isChecked: boolean;
+    isCollection: boolean;
 }

@@ -1,8 +1,5 @@
-<textarea
-  cols="80"
-  rows="30"
-  [(ngModel)]="inputCode"
-  (ngModelChange)="handleCodeInputChange()"
-></textarea>
-
-<router-outlet></router-outlet>
+<ctpb-navbar></ctpb-navbar>
+<div class="container">
+    <ctpb-code-input></ctpb-code-input>
+    <router-outlet></router-outlet>
+</div>

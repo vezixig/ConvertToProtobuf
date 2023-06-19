@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-6">
+        <h4>C# class code</h4>
+        <textarea
+            style="width: 100%"
+            rows="30"
+            [(ngModel)]="inputCode"
+            (ngModelChange)="handleCodeInputChange()"
+        ></textarea>
+    </div>
+    <div class="col-6">
+        <h4>Class</h4>
+        <div *ngIf="!conversionClass" class="fst-italic">No class found</div>
+        <div>{{ conversionClass?.name }}</div>
+
+        <div *ngIf="conversionClass">
+            <h4>Found Properties</h4>
+            <div *ngIf="!conversionClass" class="fst-italic">
+                No properties found
+            </div>
+
+            <table *ngIf="conversionClass">
+                <tr>
+                    <th>Name</th>
+                    <th>C# Type</th>
+                    <th colspan="2">Protobuf Type</th>
+                </tr>
+                <tr *ngFor="let property of conversionClass.properties">
+                    <td>
+                        <div clasS="form-check">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                ngModel="property.isChecked"
+                                id="{{ property.name }}"
+                            />
+                            <label class="form-check-label" for="defaultCheck1">
+                                {{ property.name }}
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        {{ property.csharpType }}
+                    </td>
+                    <td>
+                        {{ property.isCollection ? "repeat" : "" }}
+                    </td>
+                    <td>
+                        <select [(ngModel)]="property.protobufType">
+                            <option
+                                *ngFor="let protobufType of protobufTypes"
+                                [ngValue]="protobufType"
+                            >
+                                {{ protobufType }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
