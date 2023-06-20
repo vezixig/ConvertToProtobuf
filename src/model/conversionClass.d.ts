@@ -1,4 +1,4 @@
-declare interface conversionClass {
+declare interface ConversionClass {
     name: string;
     properties: Property[];
 }

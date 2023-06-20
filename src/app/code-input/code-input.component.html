@@ -6,10 +6,10 @@
     <div class="col-6">
         <h4>Class</h4>
         <div *ngIf="!conversionClass" class="fst-italic">No class found</div>
-        <div class="text-primary">{{ conversionClass?.name }}</div>
+        <h3 class="text-primary">{{ conversionClass?.name }}</h3>
 
-        <div *ngIf="conversionClass">
-            <h4>Found Properties</h4>
+        <div *ngIf="conversionClass" class="py-2">
+            <h4>Properties</h4>
             <div *ngIf="!conversionClass" class="fst-italic">No properties found</div>
 
             <table *ngIf="conversionClass" class="table">

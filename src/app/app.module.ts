@@ -8,15 +8,18 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CodeInputComponent } from './code-input/code-input.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CodeOutputComponent } from './code-output/code-output.component';
 
 @NgModule({
-    declarations: [AppComponent, CodeInputComponent, NavbarComponent],
+    declarations: [AppComponent, CodeInputComponent, NavbarComponent, CodeOutputComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
         FormsModule,
         BrowserAnimationsModule,
         NgbModule,
+        FontAwesomeModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

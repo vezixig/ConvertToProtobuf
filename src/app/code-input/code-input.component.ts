@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { ParsingService } from '../parsing.service';
 
 @Component({
@@ -7,12 +7,14 @@ import { ParsingService } from '../parsing.service';
     styleUrls: ['./code-input.component.scss'],
 })
 export class CodeInputComponent {
-    public conversionClass?: conversionClass;
+    public conversionClass?: ConversionClass;
+    @Output() InputChanged = new EventEmitter<ConversionClass>();
 
     constructor(private _parsingService: ParsingService) {}
 
     public handleCodeInputChange() {
         this.conversionClass = undefined;
+        this.InputChanged.emit(this.conversionClass);
 
         let className = this._parsingService.getClassName(this.inputCode);
         let properties = this._parsingService.getFields(this.inputCode);
@@ -25,6 +27,7 @@ export class CodeInputComponent {
         console.log(properties);
 
         this.conversionClass = { name: className, properties: properties };
+        this.InputChanged.emit(this.conversionClass);
     }
 
     private _conversionMatrix = new Map<string, string>([

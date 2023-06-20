@@ -1,8 +1,6 @@
 <ctpb-navbar></ctpb-navbar>
-<div
-    class="container bg-dark rounded"
-    style="padding: 10px; margin-top: 10px; height: 100%"
->
-    <ctpb-code-input></ctpb-code-input>
+<div class="container bg-dark rounded" style="padding: 10px; margin-top: 10px; height: 100%">
+    <ctpb-code-input (InputChanged)="handleInputChanged($event)"></ctpb-code-input>
+    <ctpb-code-output [conversionClass]="conversionClass"></ctpb-code-output>
     <router-outlet></router-outlet>
 </div>
