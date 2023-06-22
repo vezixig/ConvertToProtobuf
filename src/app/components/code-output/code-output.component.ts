@@ -35,7 +35,7 @@ export class CodeOutputComponent {
 
         // Add namespaces for google messages
         let neededNamespaces = activeProperties.filter((property) => property.protobufType.includes('.')).distinct();
-        neededNamespaces.forEach((namespace) => (protoBuf += `import "${namespace.protobufType.toLocaleLowerCase().replaceAll('.', '/')}.proto";\n`));
+        neededNamespaces.forEach((namespace: Property) => (protoBuf += `import "${namespace.protobufType.toLocaleLowerCase().replaceAll('.', '/')}.proto";\n`));
 
         if (neededNamespaces) {
             protoBuf += '\n';
