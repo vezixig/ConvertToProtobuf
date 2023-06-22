@@ -21,7 +21,7 @@
                 <tr *ngFor="let property of parsedClass?.properties">
                     <td>
                         <div clasS="form-check">
-                            <input class="form-check-input" type="checkbox" ngModel="property.isChecked" id="{{ property.name }}" />
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="property.isChecked" (ngModelChange)="handleSelectionChange()" id="{{ property.name }}" />
                             <label class="form-check-label" for="{{ property.name }}">
                                 {{ property.name }}
                             </label>
@@ -34,7 +34,7 @@
                         {{ property.isCollection ? "repeated" : "" }}
                     </td>
                     <td>
-                        <select [(ngModel)]="property.protobufType">
+                        <select [(ngModel)]="property.protobufType" (ngModelChange)="handleSelectionChange()">
                             <option *ngFor="let protobufType of protobufTypes" [ngValue]="protobufType">
                                 {{ protobufType }}
                             </option>

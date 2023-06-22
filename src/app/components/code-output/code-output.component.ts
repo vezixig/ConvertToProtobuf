@@ -9,22 +9,19 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
     templateUrl: './code-output.component.html',
     styleUrls: ['./code-output.component.scss'],
 })
-export class CodeOutputComponent implements OnChanges {
+export class CodeOutputComponent {
     /**
      * Input property for the conversion class.
      * The conversion class contains the necessary information to generate the protobuf definition.
      */
-    @Input() conversionClass?: ConversionClass;
-    /**
-     * Holds the generated protobuf definition.
-     */
-    public protobufDefinition = '';
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['conversionClass']) {
-            this.protobufDefinition = !this.conversionClass ? '' : this.generateProtoBuf(this.conversionClass);
+    @Input() public set conversionClass(value: ConversionClass | undefined) {
+        if (value !== undefined) {
+            this.protobufDefinition = this.generateProtoBuf(value);
         }
     }
+
+    /** Holds the generated protobuf definition.*/
+    public protobufDefinition = '';
 
     /**
      * Generates the protobuf definition based on the provided conversion class.

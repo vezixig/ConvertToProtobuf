@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 const keyCSharpType = 'cSharpType';
 const keyName = 'name';
-const classNameRegex = /class\s+(?<className>\w+)/;
-const fieldRegex = new RegExp(`public\\s(?!class|enum)(?<${keyCSharpType}>[\\w<>\\[\\]]*)\\s(?<${keyName}>[^\\s\\(\\n]*)\\s`, 'gm');
+const CLASS_NAME_REGEXP = /class\s+(?<className>\w+)/;
+const FIELD_REGEXP = new RegExp(`public\\s(?!class|enum)(?<${keyCSharpType}>[\\w<>\\[\\]]*)\\s(?<${keyName}>[^\\s\\(\\n]*)\\s`, 'gm');
 
 /**
  * The `ParsingService` class provides utility methods for parsing class definitions.
@@ -20,7 +20,7 @@ export class ParsingService {
      * @throws Error if the class name cannot be parsed.
      */
     public getClassName(input: string): string {
-        const match = input.match(classNameRegex);
+        const match = input.match(CLASS_NAME_REGEXP);
 
         if (match?.groups?.['className']) {
             return match.groups['className'];
@@ -38,7 +38,7 @@ export class ParsingService {
         let match: RegExpExecArray | null;
 
         // find all fields
-        while ((match = fieldRegex.exec(input))) {
+        while ((match = FIELD_REGEXP.exec(input))) {
             if (match.groups?.[keyName] && match.groups?.[keyCSharpType]) {
                 fields.push(this.createCSharpProperty(match.groups[keyName], match.groups[keyCSharpType]));
             }

@@ -26,27 +26,19 @@ const conversionMatrix = new Map<string, string>([
     ['bool?', 'google.protobuf.BoolValue'],
 ]);
 
-/**
- * CodeInputComponent is responsible for handling code input and emitting the converted result.
- */
+/** CodeInputComponent is responsible for handling code input and emitting the converted result. */
 @Component({
     selector: 'ctpb-code-input',
     templateUrl: './code-input.component.html',
     styleUrls: ['./code-input.component.scss'],
 })
 export class CodeInputComponent {
-    /**
-     * Output event emitter for notifying when the input has changed and providing the conversion result.
-     */
+    /** Output event emitter for notifying when the input has changed and providing the conversion result. */
     @Output() InputChanged = new EventEmitter<ConversionClass>();
 
-    /**
-     * The ConversionClass object representing the parsed class.
-     */
+    /** The ConversionClass object representing the parsed class. */
     public parsedClass?: ConversionClass;
-    /**
-     * The input code to be converted.
-     */
+    /** The input code to be converted. */
     public inputCode = '';
 
     constructor(private _parsingService: ParsingService) {}
@@ -65,6 +57,14 @@ export class CodeInputComponent {
         properties = properties.map((o) => this.convertToProtobufType(o));
 
         this.parsedClass = { name: className, properties: properties };
+        this.InputChanged.emit(this.parsedClass);
+    }
+
+    /**
+     * Handles changes on the selection of active properties and protobuf datatypes
+     */
+    public handleSelectionChange() {
+        console.log('changing');
         this.InputChanged.emit(this.parsedClass);
     }
 
